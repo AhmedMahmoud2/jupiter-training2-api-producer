@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "<DATA_DOMAIN> - <ENTITY> - Enterprise Endpoint",
+  "type": "object",
+  "required": ["response"],
+  "properties": {
+    "response": {
+      "description": "Generic wrapper for all endpoints.",
+      "type": "object",
+      "required": ["<ENTITY>"],
+      "properties": {
+        "<ENTITY>": {
+          "description": "The standard object for the main entity in an individual resource response, matching the canonical <ENTITY> entity name.",
+          "type": "object",
+          "required": ["identifier", "name", "code", "in_use", "<SUB_ENTITY>"],
+          "properties": {
+            "identifier": {
+              "description": "The code or otherwise that is used to reference individual elements of this collection, in this case the <ENTITY> code.",
+              "type": "string",
+              "examples": ["<EXAMPLE>"]
+            },
+            "code": {
+              "description": "The business code for this department.",
+              "type": "string",
+              "examples": ["<EXAMPLE>"]
+            },
+            "name": {
+              "description": "The name for this department",
+              "type": "string",
+              "examples": ["<EXAMPLE>"]
+            },
+            "in_use": {
+              "description": "Whether or not this department is still in use.",
+              "type": "boolean"
+            },
+            "<SUB_ENTITY>": {
+              "description": "The <PARENT/CHILD_ENTITY> for this <ENTITY>.",
+              "type": "object",
+              "required": ["identifier", "name", "code"],
+              "properties": {
+                "identifier": {
+                  "description": "In this case the <PARENT/CHILD_ENTITY> code.",
+                  "type": "string",
+                  "examples": ["<EXAMPLE>"]
+                },
+                "code": {
+                  "description": "The <PARENT/CHILD_ENTITY> code.",
+                  "type": "string",
+                  "examples": ["<EXAMPLE>"]
+                },
+                "name": {
+                  "description": "The <PARENT/CHILD_ENTITY> name.",
+                  "type": "string",
+                  "examples": ["<EXAMPLE>"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

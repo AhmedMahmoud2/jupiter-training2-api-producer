@@ -1,0 +1,15 @@
+{
+  "response": {
+    "<ENTITY>": {
+      "identifier": "<EXAMPLE>",
+      "code": "<EXAMPLE>",
+      "name": "<EXAMPLE>",
+      "in_use": true,
+      "<SUB_ENTITY>": {
+        "identifier": "<EXAMPLE>",
+        "code": "<EXAMPLE>",
+        "name": "<EXAMPLE>"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "version": "2.0",
+  "routeKey": "GET /status/{status}",
+  "rawPath": "/status/01101",
+  "rawQueryString": "q=field:value",
+  "headers": {
+      "accept": "application/json",
+      "accept-encoding": "gzip, deflate, br",
+      "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiI3ODM2YzAwZC1hMmU0LTQ1MDEtODY5My1lMDlkODRiNjdhMjMiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vMWZhZjg4ZmUtYTk5OC00YzViLTkzYzktMjEwYTExZDlhNWMyL3YyLjAiLCJpYXQiOjE2NjA0MDI2MTEsIm5iZiI6MTY2MDQwMjYxMSwiZXhwIjoxNjYwNDA2NTExLCJhaW8iOiJFMlpnWUpDNTRwMlcvdFRVN0dvQlMwUldtOFZLQUE9PSIsImF6cCI6Ijc4MzZjMDBkLWEyZTQtNDUwMS04NjkzLWUwOWQ4NGI2N2EyMyIsImF6cGFjciI6IjEiLCJvaWQiOiJhNGQ4MGRkYy1jOTI5LTRiMGQtOGY5Yy03YTlhNzU1NTRlZWMiLCJyaCI6IjAuQVFVQV9vaXZINWlwVzB5VHlTRUtFZG1sd2czQU5uamtvZ0ZGaHBQZ25ZUzJlaU1GQUFBLiIsInN1YiI6ImE0ZDgwZGRjLWM5MjktNGIwZC04ZjljLTdhOWE3NTU1NGVlYyIsInRpZCI6IjFmYWY4OGZlLWE5OTgtNGM1Yi05M2M5LTIxMGExMWQ5YTVjMiIsInV0aSI6IlBuWk9aWE1SSDAtbHo1UmExMElJQUEiLCJ2ZXIiOiIyLjAifQ.YeTwgL4otpYJjMVvl2fwdLH1-ByM6uVXeaoir5vjIN76cC9z7ASyNMbagMhOA_5ZyS1EPscvHyPIhV344x3cuGRwdFm6SnZfh7A6V0HfH2TNE6bzgps5Q1XwOAuer72B74MXLBkNQs73Q50l4Vza4qLxcJNeUIIBx978TLDGfMMkTG9LOQwfFDx-nWjw_cvuLhkOpgb5M2nk1aIg-oOvhL-X-hry96GaOl3LStOdEQ5kRIbj-eZZkvHUrZJzt2Xa8FEWE9Rrp3Mh9Lt_OjH_4icENG6VuIFIvsdHmliGJhVGf6fYJ6yK-9TLUF4VouTznpQl3HANSjJtuRTqTKZx5g",
+      "cache-control": "no-cache",
+      "content-length": "84",
+      "content-type": "application/json",
+      "host": "aais.integration.ucl.ac.uk",
+      "postman-token": "5c117d05-777f-4869-b1af-80e754a122d2",
+      "user-agent": "PostmanRuntime/7.29.2",
+      "x-amzn-trace-id": "Root=1-62f7bce0-0453f3ef36745db15358ec08",
+      "x-forwarded-for": "212.132.231.25",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https"
+  },
+  "queryStringParameters": {
+      "q": "field:value"
+  },
+  "requestContext": {
+      "accountId": "151571714362",
+      "apiId": "j4ahm66de9",
+      "authorizer": {
+          "jwt": {
+              "claims": {
+                  "aio": "E2ZgYJC54p2W/tTU7GoBS0RWm8VKAA==",
+                  "aud": "7836c00d-a2e4-4501-8693-e09d84b67a23",
+                  "azp": "7836c00d-a2e4-4501-8693-e09d84b67a23",
+                  "azpacr": "1",
+                  "exp": "1660406511",
+                  "iat": "1660402611",
+                  "iss": "https://login.microsoftonline.com/1faf88fe-a998-4c5b-93c9-210a11d9a5c2/v2.0",
+                  "nbf": "1660402611",
+                  "oid": "a4d80ddc-c929-4b0d-8f9c-7a9a75554eec",
+                  "rh": "0.AQUA_oivH5ipW0yTySEKEdmlwg3ANnjkogFFhpPgnYS2eiMFAAA.",
+                  "sub": "a4d80ddc-c929-4b0d-8f9c-7a9a75554eec",
+                  "tid": "1faf88fe-a998-4c5b-93c9-210a11d9a5c2",
+                  "uti": "PnZOZXMRH0-lz5Ra10IIAA",
+                  "ver": "2.0"
+              },
+              "scopes": null
+          }
+      },
+      "domainName": "aais.integration.ucl.ac.uk",
+      "domainPrefix": "aais",
+      "http": {
+          "method": "GET",
+          "path": "/status/01101",
+          "protocol": "HTTP/1.1",
+          "sourceIp": "212.132.231.25",
+          "userAgent": "PostmanRuntime/7.29.2"
+      },
+      "requestId": "WzpzGirirPEEMZw=",
+      "routeKey": "GET /status/{status}",
+      "stage": "$default",
+      "time": "13/Aug/2022:15:01:52 +0000",
+      "timeEpoch": 1660402912407
+  },
+  "pathParameters": {
+      "status": "01101"
+  },
+  "body": "{\r\n    \"status\": \"ACTIVE\",\r\n    \"kit\": \"EASIKit\",\r\n    \"data\": \"0100100001101001\"\r\n}",
+  "isBase64Encoded": false
+}

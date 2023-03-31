@@ -1,0 +1,139 @@
+name: status_api_publisher
+
+on:
+  push:
+    paths:
+      - '.github/workflows/status_api_publisher.yaml'
+      - 'functions/status_api_publisher/**'
+    branches-ignore:
+      - 'release'
+  pull_request:
+    paths:
+      - '.github/workflows/status_api_publisher.yaml'
+      - 'functions/status_api_publisher/**'
+    branches-ignore:
+      - 'release'
+
+  workflow_dispatch:
+
+
+env:
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  SKIP_INTEGRATION_TESTS: "true"
+  FUNCTION_NAME: status_api_publisher
+
+
+jobs:
+  nonprod-test:
+    runs-on: ubuntu-20.04
+
+    environment: nonprod
+
+    steps:
+    - name: Checkout source repo 
+      uses: actions/checkout@v3
+      with:
+        path: source-repo
+
+    - name: Checkout EASIKit
+      uses: actions/checkout@v3
+      with:
+        ssh-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+        repository: ucl-isd/easikit-core
+        path: easikit-core
+
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+
+    - name: Install virtualenv
+      run: pip install virtualenv
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+
+    - name: Set the AWS profile credentials
+      run: |
+        source domain.properties
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile $service_domain
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $service_domain
+        aws configure set region eu-west-2 --profile $service_domain
+      working-directory: source-repo
+
+    - name: Add vault key
+      run: echo "${{secrets.VAULT_KEY}}" | ../easikit-core/z.sh deploy secret -z
+      working-directory: source-repo
+
+    - name: Install Python dependencies
+      run: ../easikit-core/z.sh python init ${{env.FUNCTION_NAME}} -x
+      working-directory: source-repo
+
+    #- name: Run Python Linting (..command to be added to easikit-core)
+    #  run: ../easikit-core/z.sh python lint ${{env.FUNCTION_NAME}}
+    #  working-directory: source-repo
+
+    - name: Run Python Tests
+      run: ../easikit-core/z.sh python test ${{env.FUNCTION_NAME}} -x
+      working-directory: source-repo
+
+    - name: Build the Lambda image
+      run: ../easikit-core/z.sh python build ${{env.FUNCTION_NAME}} -x
+      working-directory: source-repo
+
+
+  prod-test-build:
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: nonprod-test
+
+    environment: prod
+
+    steps:
+    - name: Checkout source repo
+      uses: actions/checkout@v3
+      with:
+        path: source-repo
+
+    - name: Checkout EASIKit
+      uses: actions/checkout@v3
+      with:
+        ssh-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+        repository: ucl-isd/easikit-core
+        path: easikit-core
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+
+    - name: Set the AWS profile credentials
+      run: |
+        source domain.properties
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile $service_domain
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $service_domain
+        aws configure set region eu-west-2 --profile $service_domain
+      working-directory: source-repo
+
+    - name: Build the Lambda image
+      run: ../easikit-core/z.sh python build ${{env.FUNCTION_NAME}} -x
+      working-directory: source-repo
+
+    - name: Push the Lambda image to Docker
+      run: ../easikit-core/z.sh python push ${{env.FUNCTION_NAME}} -x
+      working-directory: source-repo
+
+    - name: Git tag
+      if: github.ref == 'refs/heads/main'
+      run: |
+        source functions/${{env.FUNCTION_NAME}}/function.properties
+        git config user.email "githubactions@ucl.ac.uk"
+        git config user.name "GitHub Actions"
+        GIT_VERSION="image-$function_name-v$function_version"
+        git tag -a $GIT_VERSION -m "$(git log -1 --pretty=format:%s)"
+        git push origin $GIT_VERSION
+      working-directory: source-repo

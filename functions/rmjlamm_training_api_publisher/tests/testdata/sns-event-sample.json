@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:eu-west-2:151571714362:easikit-status-create-dev:476435c1-93dc-40c2-90a4-3d9d7d9c1eee",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "bb9d38c8-d62e-5e71-8519-63a1579fb2db",
+        "TopicArn": "arn:aws:sns:eu-west-2:151571714362:easikit-status-create-dev",
+        "Subject": null,
+        "Message": "{\"identifier\": \"a2826c22-032e-48a0-9789-2ea20085ed7a\", \"timestamp\": \"20220807T090137.087151UTC\", \"event\": {\"name\": \"status\", \"type\": \"update\", \"source\": \"easikit\"}, \"entity\": {\"status\": {\"identifier\": \"9f476291-4e8e-46fd-a6f5-475caf5e167b\", \"name\": \"STATUS\", \"echo\": {\"status\": \"ACTIVE\"}}}}",
+        "Timestamp": "2022-08-07T09:01:37.299Z",
+        "SignatureVersion": "1",
+        "Signature": "QWRfSyUHGUjQ1yebtGwjpWCNRFahZ7FLw90gKYuDtQ3FTfjZoiK24+tscqUjkJOUeo2LkzcVxe0K7DzZwwbJaBcHyNiDg5DIUNlhkUr5hLDwX7LHjCDLLrs4/hbWFOGVYIzKWhgWkGzF4oRj7Pg7F8pplqqTpNwI2aG1moW+U9TIl0n2lKqSrdVEw61gRmdtV7zCVm1NTmncrkxOfR2Uaif+zT5DsG+MkHE+twu7hx09VIYkCj24o0FgOTRNrG/j/JSjqAPiboBrIEXDZZBGUe/AtkrEFokwK1CFU1VkQPv12zivJc2eOhs/J9AXKW17NdTjY5hpRYoIPx4jPAenBg==",
+        "SigningCertUrl": "https://sns.eu-west-2.amazonaws.com/SimpleNotificationService-56e67fcb41f6fec09b0196692625d385.pem",
+        "UnsubscribeUrl": "https://sns.eu-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-2:151571714362:easikit-status-create-dev:476435c1-93dc-40c2-90a4-3d9d7d9c1eee",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}

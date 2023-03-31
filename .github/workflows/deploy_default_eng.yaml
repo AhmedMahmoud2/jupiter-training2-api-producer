@@ -1,0 +1,111 @@
+name: deploy-default-eng
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy_default_eng.yaml'
+      - 'terraform/default/modules/**'
+      - 'terraform/default/targets/eng/**'
+    # only attempts merges for stable branches
+    # when merging to the main brainch for that env
+    ##STABLE_ENVS## branches:
+    ##STABLE_ENVS##   - main # stable branch
+
+  pull_request:
+    paths:
+      - '.github/workflows/deploy_default_eng.yaml'
+      - 'terraform/default/modules/**'
+      - 'terraform/default/targets/eng/**'
+
+  workflow_dispatch:
+
+# Only allow a single deployment to an environment at a time
+concurrency: eng
+
+env:
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  DEPLOY_MODULE: default
+  DEPLOY_TARGET: eng
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    environment: nonprod
+
+    steps:
+    - name: Checkout source repo 
+      uses: actions/checkout@v3
+      with:
+        path: source-repo
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+
+    - name: Install virtualenv
+      run: pip install virtualenv
+      
+    - name: Checkout EASIKit
+      uses: actions/checkout@v3
+      with:
+        ssh-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+        repository: ucl-isd/easikit-core
+        path: easikit-core
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{secrets.EASIKIT_PRIVATE_KEY}}
+
+    - name: Add vault key
+      run: echo "${{secrets.VAULT_KEY}}" | ../easikit-core/z.sh deploy secret -z
+      working-directory: source-repo
+
+
+    - name: Terraform Init
+      run: |
+        ../easikit-core/z.sh deploy init -m ${{env.DEPLOY_MODULE}} \
+                        -t ${{env.DEPLOY_TARGET}} \
+                        -a "-var=aws_profile=" \
+                        -x
+      working-directory: source-repo
+
+    - name: Terraform Plan
+      run: |
+        ../easikit-core/z.sh deploy plan -m ${{env.DEPLOY_MODULE}} \
+                        -t ${{env.DEPLOY_TARGET}} \
+                        -a "-var=aws_profile=" \
+                        -x
+      working-directory: source-repo
+
+    - name: Terraform Apply
+      # this condition is only needed for stable branches, e.g. UAT, pre-release
+      ##STABLE_ENVS## if: github.ref == 'refs/heads/main'
+      run: |
+        ../easikit-core/z.sh deploy apply -m ${{env.DEPLOY_MODULE}} \
+                        -t ${{env.DEPLOY_TARGET}} \
+                        -a "-var=aws_profile=" \
+                        -x \
+                        -y
+      working-directory: source-repo
+
+    - name: Run acceptance tests
+      run: |
+        ../easikit-core/z.sh acceptance init 
+        ../easikit-core/z.sh acceptance run -t ${{env.DEPLOY_TARGET}} 
+      working-directory: source-repo
+
+    - name: Terraform Destroy
+      run: |
+        ../easikit-core/z.sh deploy destroy -m ${{env.DEPLOY_MODULE}} \
+                        -t ${{env.DEPLOY_TARGET}} \
+                        -a "-var=aws_profile=" \
+                        -x \
+                        -y
+      working-directory: source-repo

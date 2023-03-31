@@ -1,0 +1,5 @@
+{
+    "identifier": "123456",
+    "name": "test-data",
+    "description": "Example of data posted to gateway, to be wrapped in enterprise data and sent to topic."
+}
